@@ -1,0 +1,58 @@
+Estrutura
+
+Temos uma estrutura baseada no modelo cliente-servidor onde, o cliente é o dispositivo conectado na porta serial. Tal comportamente se deve ao fato de não ser possível abrir uma porta quando se está conectado no 3g (operadores não permitem abrir portas)
+
+Foi utilizada uma placa atmega328 para simular um dispositivo conectado na porta serial no cliente utilizando um conversor Serial-USB da FTDI.
+Para simular a utilização do dispositivo, embarcamos um código que ao receber uma string, através da serial, calcula o próximo elemento da tabela ASCII e escreve na porta serial o valor obtido.
+
+Implementação.
+
+Temos um módulo do código que é reposponsável pela comunicação do servidor com cliente e cliente com servidor (Serial CHAT).
+
+Outro módulo é o responsável pela comunicação com a porta serial (escrita/leitura)
+
+Funcionamento:
+Toda a vez que é escrito algo na porta serial esta escrita é "captada" pela nossa aplicação e é enviada via "Serial CHAT" para o servidor, este ao receber alguma informação escreve na sua porta serial "emulada".
+
+Toda vez que o cliente recebe alguma informação via "Serial CHAT" ele escreve esta informação na porta serial.
+
+
+Testes feitos:
+1 Escrita na serial: (inserir imagens)
+
+1.1.1 - Escrever conteúdo "a" na porta serial.
+1.1.2 - Esperado: Ler conteúdo "b" no CUTECOM
+
+1.2.1 - Escrever contuúdo "abc" na porta serial.
+1.2.2 - Esperado: Ler conteúdo "bcd" no CUTECOM
+
+2 Leitura da serial: (inserir imagens)
+2.1.1 - Escrever conteúdo "a" no CUTECOM
+2.1.2 - Esperado: Ler conteúdo "b" na porta serial
+
+2.2.1 - Escrever conteúdo "abc" no CUTECOM
+2.2.2 - Esperado: Ler conteúdo "bcd" na porta serial
+
+3 Comunicação: (inserir imagens)
+3.1.1 - Enviar conteúdo "a" do servidor para cliente
+3.1.2 - Esperado: Cliente receber "a"
+
+3.2.1 - Enviar conteúdo "abc" do servidor para cliente
+3.2.2 - Esperado: Cliente receber "abc"
+
+3.3.1 - Enviar conteúdo "a" do cliente para seridor
+3.3.2 - Esperado: Cliente receber "a"
+
+3.4.1 - Enviar conteúdo "abc" do cliente para seridor
+3.4.2 - Esperado: Cliente receber "abc"
+
+Utilizando o software stty podemos visualizar o estado atual da porta serial
+$ stty < /dev/ttyUSB0
+speed 9600 baud; line = 0;
+intr = <undef>; quit = <undef>; erase = <undef>; kill = <undef>; eof = <undef>; start = <undef>; stop = <undef>; susp = <undef>; rprnt = <undef>;
+werase = <undef>; lnext = <undef>; flush = <undef>; min = 0; time = 0;
+-brkint -icrnl -imaxbel
+-opost -onlcr
+-isig -icanon -iexten -echo -echoe -echok -echoctl -echoke
+
+
